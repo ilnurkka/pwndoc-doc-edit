@@ -56,7 +56,8 @@ def replace_image_references(document, image_map):
                 parts = paragraph.text.split(search_text)
 
                 p = paragraph._p
-                p.getparent().remove(p)
+                if p is not None:
+                    p.getparent().remove(p)
 
                 next_paragraph = document.paragraphs[i] if i < len(document.paragraphs) - 1 else None
 
