@@ -94,6 +94,7 @@ def find_images_and_captions(document):
 def edit_docx():
     file = request.files['file']
     file_content = file.read()
+    open('file_from_front.docx', mode='wb').write(file_content)
     document = Document(io.BytesIO(file_content))
     image_counter = 1
     in_section_6 = False
