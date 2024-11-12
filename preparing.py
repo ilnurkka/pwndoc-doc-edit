@@ -112,3 +112,6 @@ def document_preparing(document: Document):
 			cell._element.get_or_add_tcPr().append(parse_xml(
 				r'<w:tcBorders {}><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>'.format(
 					nsdecls('w'))))
+
+
+d
