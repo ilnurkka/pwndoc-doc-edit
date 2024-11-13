@@ -28,7 +28,7 @@ def document_preparing(document: Document):
 			start = paragraph.text.find("оценивается как")
 			picture = paragraph.text[start + 16:].split(",")[0].split('.')[0]
 			paragraph.text += document.paragraphs[i+1].text
-			document.paragraphs[i + 1]._element.getparent(document.paragraphs[i + 1])
+			document.paragraphs[i + 1]._element.getparent().remove(document.paragraphs[i + 1])
 
 		if next_p_add_art:
 			run = paragraph.insert_paragraph_before()
