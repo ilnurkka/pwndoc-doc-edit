@@ -5,8 +5,8 @@ from .hyperlink import add_hyperlink
 def replace_image_references(document, image_map):
     for i, paragraph in enumerate(document.paragraphs):
         for key, value in image_map.items():
-            search_text = f'(см. {key})'
-            replacement_text = f'(см. {value})'
+            search_text = f'[см. {key}]'
+            replacement_text = f'{value}'
 
             if search_text in paragraph.text:
                 parts = paragraph.text.split(search_text)
