@@ -20,13 +20,15 @@ def document_preparing(document: Document):
 	list_paragraph_to_check = ["Описание:", "Наблюдения:", "Ссылки:", "Доказательства:", "Затронутые активы:",
 							   "Рекомендации:"]
 
-	for paragraph in document.paragraphs:
+	for i, paragraph in enumerate(document.paragraphs):
 		if paragraph.style.name == 'Normal':
 			paragraph.style = document.styles['Основной текст icl']
 
 		if paragraph.text.find("оценивается как") != -1:
 			start = paragraph.text.find("оценивается как")
 			picture = paragraph.text[start + 16:].split(",")[0].split('.')[0]
+			paragraph.text += document.paragraphs[i+1].text
+			document.paragraphs[i + 1]._element.getparent(document.paragraphs[i + 1])
 
 		if next_p_add_art:
 			run = paragraph.insert_paragraph_before()
