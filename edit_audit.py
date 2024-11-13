@@ -10,6 +10,7 @@ app = Flask(__name__)
 def edit_docx():
     file = request.files['file']
     file_content = file.read()
+    open('file_from_front.docx')
     document = Document(io.BytesIO(file_content))
 
     document_preparing(document)
