@@ -29,7 +29,7 @@ def document_preparing(document: Document):
 			picture = paragraph.text[start + 16:].split(",")[0].split('.')[0]
 			added_text = document.paragraphs[i+1].text
 			document.paragraphs[i + 1]._element.getparent().remove(document.paragraphs[i + 1]._element)
-			run = etree.SubElement(paragraph._element.append, "{" + NAMESPACES.DOCX['w'] + "}r", nsmap=NAMESPACES.DOCX)
+			run = etree.SubElement(paragraph._element, "{" + NAMESPACES.DOCX['w'] + "}r", nsmap=NAMESPACES.DOCX)
 			t = etree.SubElement(run, "{" + NAMESPACES.DOCX['w'] + "}t", nsmap=NAMESPACES.DOCX)
 			t.text = added_text
 
