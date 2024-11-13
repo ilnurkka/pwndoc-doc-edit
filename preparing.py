@@ -4,7 +4,8 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 from docx.shared import Inches, Cm, Pt
 from lxml import etree
-from utils import find_images_and_captions, replace_image_references
+from utils import find_images_and_captions, replace_image_references, \
+	create_bookmarks, highlight_clear
 
 
 class NAMESPACES:
@@ -61,9 +62,20 @@ def document_preparing(document: Document):
 				need_to_delete_next = True
 
 			if paragraph.style.name == 'Caption':
-				paragraph.text = f"Рисунок 6.{image_counter} - {paragraph.text}"
-				for run in paragraph.runs:
-					run.font.size = Pt(10)
+				text = paragraph.text
+				start_b, end_b = create_bookmarks(text)
+
+				for ch in paragraph._element.getchildren():
+					if ch.tag.replace('{'+NAMESPACES.DOCX['w']+'}', '') == 'r':
+						paragraph._element.remove(ch)
+				run = paragraph.add_run()
+				run.text = f"Рисунок 6.{image_counter} - {text}"
+				run.font.size = Pt(10)
+
+				paragraph._element.append(start_b)
+				paragraph._element.append(run._element)
+				paragraph._element.append(end_b)
+
 				image_counter += 1
 
 			reserv_paragraph = paragraph
@@ -165,3 +177,6 @@ def document_preparing(document: Document):
 					ind.attrib["{" + NAMESPACES.DOCX['w'] + '}left'] = "720"
 
 					p_style.addnext(ind)
+
+	# удаляем выделения текста
+	highlight_clear(document)
