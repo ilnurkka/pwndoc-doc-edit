@@ -2,7 +2,7 @@ import io
 from docx import Document
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
-from docx.shared import Inches, Cm
+from docx.shared import Inches, Cm, Pt
 from lxml import etree
 from utils import find_images_and_captions, replace_image_references
 
@@ -62,6 +62,8 @@ def document_preparing(document: Document):
 
 			if paragraph.style.name == 'Caption':
 				paragraph.text = f"Рисунок 6.{image_counter} - {paragraph.text}"
+				for run in paragraph.runs:
+					run.font.size = Pt(10)
 				image_counter += 1
 
 			reserv_paragraph = paragraph
