@@ -92,6 +92,10 @@ def document_preparing(document: Document):
 			cell._element.get_or_add_tcPr().append(parse_xml(
 				r'<w:tcBorders {}><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>'.format(
 					nsdecls('w'))))
+			for p in cell.paragraphs:
+				for r in p.runs:
+					r.font.name = 'Arial'
+
 
 	# Работа с терминами
 	table2 = document.tables[1]
@@ -116,6 +120,9 @@ def document_preparing(document: Document):
 			cell._element.get_or_add_tcPr().append(parse_xml(
 				r'<w:tcBorders {}><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>'.format(
 					nsdecls('w'))))
+			for p in cell.paragraphs:
+				for r in p.runs:
+					r.font.name = 'Arial'
 
 
 	# проверка на Null в полях "Уровень трудности устранения" и "Приоритет" (если Null, то не выводить название)
@@ -136,6 +143,12 @@ def document_preparing(document: Document):
 			in_section_6 = True
 
 		if in_section_6:
+
+			if p.text.lower().replace(' ', '') == 'Рекомендации:'.lower():
+				runs = p.findall('.//w:r', NAMESPACES.DOCX)
+				if len(runs) > 0:
+					runs[0].text = 'Рекомендации к устранению:'
+
 			p_pr = p.find('.//w:pPr', NAMESPACES.DOCX)
 			if p_pr is not None:
 				num_id = p_pr.find('.//w:numId', NAMESPACES.DOCX)
