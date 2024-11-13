@@ -27,8 +27,11 @@ def document_preparing(document: Document):
 		if paragraph.text.find("оценивается как") != -1:
 			start = paragraph.text.find("оценивается как")
 			picture = paragraph.text[start + 16:].split(",")[0].split('.')[0]
-			paragraph.text += document.paragraphs[i+1].text
+			added_text = document.paragraphs[i+1].text
 			document.paragraphs[i + 1]._element.getparent().remove(document.paragraphs[i + 1]._element)
+			run = etree.SubElement(paragraph._element.append, "{" + NAMESPACES.DOCX['w'] + "}r", nsmap=NAMESPACES.DOCX)
+			t = etree.SubElement(run, "{" + NAMESPACES.DOCX['w'] + "}t", nsmap=NAMESPACES.DOCX)
+			t.text = added_text
 
 		if next_p_add_art:
 			run = paragraph.insert_paragraph_before()
