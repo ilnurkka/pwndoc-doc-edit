@@ -3,8 +3,12 @@ from docx import Document
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 from docx.shared import Inches, Cm
-
+from lxml import etree
 from utils import find_images_and_captions, replace_image_references
+
+
+class NAMESPACES:
+	DOCX = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
 
 
 def document_preparing(document: Document):
@@ -114,4 +118,35 @@ def document_preparing(document: Document):
 					nsdecls('w'))))
 
 
-d
+	# проверка на Null в полях "Уровень трудности устранения" и "Приоритет" (если Null, то не выводить название)
+	# замена пунктиров на точки в рекомендациях
+	fields = ['Уровень трудности устранения', 'Приоритет']
+	in_section_6 = False
+	for p in document._element.findall('.//w:p', NAMESPACES.DOCX):
+		for field in fields:
+			if field in p.text:
+				parts = p.text.split(': ')
+				if len(parts) < 2:
+					p.getparent().remove(p)
+				elif parts[1].replace(' ', '') == '':
+					p.getparent().remove(p)
+
+		if p.text.lower().replace(' ', '') == 'Детальное описание хода работ и результатов'.lower().replace(' ', ''):
+			# проверка на 6 пункт
+			in_section_6 = True
+
+		if in_section_6:
+			p_pr = p.find('.//w:pPr', NAMESPACES.DOCX)
+			if p_pr is not None:
+				num_id = p_pr.find('.//w:numId', NAMESPACES.DOCX)
+				if num_id is not None:
+					num_id.attrib["{" + NAMESPACES.DOCX['w'] + '}val'] = "3" # применение нужного стиля пунктира
+					p_style = p_pr.find('.//w:pStyle', NAMESPACES.DOCX)
+					if p_style is not None:
+						p_style.attrib["{" + NAMESPACES.DOCX['w'] + '}val'] = "icl" # применение нужного стиля списка
+
+					# регулировка отступа слева
+					ind = etree.Element("{" + NAMESPACES.DOCX['w'] + "}ind", nsmap=NAMESPACES.DOCX)
+					ind.attrib["{" + NAMESPACES.DOCX['w'] + '}left'] = "720"
+
+					p_style.addnext(ind)
