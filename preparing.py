@@ -117,8 +117,7 @@ def document_preparing(document: Document):
 			for p in cell.paragraphs:
 				for r in p.runs:
 					r.font.name = 'Arial'
-				paragraph_format = p.paragraph_format
-				paragraph_format.alignment = WD_ALIGN_VERTICAL.TOP
+			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
 
 	# Работа с терминами
@@ -147,8 +146,7 @@ def document_preparing(document: Document):
 			for p in cell.paragraphs:
 				for r in p.runs:
 					r.font.name = 'Arial'
-				paragraph_format = p.paragraph_format
-				paragraph_format.alignment = WD_ALIGN_VERTICAL.TOP
+			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
 
 	# проверка на Null в полях "Уровень трудности устранения" и "Приоритет" (если Null, то не выводить название)
