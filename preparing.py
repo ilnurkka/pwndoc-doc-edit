@@ -1,6 +1,7 @@
 import io
 from docx import Document
 from docx.enum.table import WD_ALIGN_VERTICAL
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 from docx.shared import Inches, Cm, Pt
@@ -117,6 +118,7 @@ def document_preparing(document: Document):
 			for p in cell.paragraphs:
 				for r in p.runs:
 					r.font.name = 'Arial'
+				p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
 
@@ -146,6 +148,7 @@ def document_preparing(document: Document):
 			for p in cell.paragraphs:
 				for r in p.runs:
 					r.font.name = 'Arial'
+				p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
 
