@@ -118,7 +118,7 @@ def document_preparing(document: Document):
 			for p in cell.paragraphs:
 				for r in p.runs:
 					r.font.name = 'Arial'
-				if i == 1:
+				if i == 2:
 					p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
@@ -149,7 +149,7 @@ def document_preparing(document: Document):
 			for p in cell.paragraphs:
 				for r in p.runs:
 					r.font.name = 'Arial'
-				if i == 1:
+				if i == 2:
 					p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 
 			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
