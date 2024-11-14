@@ -106,7 +106,7 @@ def document_preparing(document: Document):
 		row.cells[1].width = Cm(0.5)
 		row.cells[2].width = Cm(13)
 
-	# table.style = 'pwndoc-table'
+	table.style = 'pwndoc-table'
 
 	for row in table.rows:
 		for cell in row.cells:
@@ -134,7 +134,7 @@ def document_preparing(document: Document):
 		row.cells[1].width = Cm(0.5)
 		row.cells[2].width = Cm(11)
 
-	# table2.style = 'pwndoc-table'
+	table2.style = 'pwndoc-table'
 
 	for row in table2.rows:
 		for cell in row.cells:
