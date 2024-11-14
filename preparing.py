@@ -111,7 +111,7 @@ def document_preparing(document: Document):
 	table.style = 'pwndoc-table'
 
 	for row in table.rows:
-		for cell in row.cells:
+		for i, cell in enumerate(row.cells):
 			cell._element.get_or_add_tcPr().append(parse_xml(
 				r'<w:tcBorders {}><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>'.format(
 					nsdecls('w'))))
@@ -119,7 +119,8 @@ def document_preparing(document: Document):
 				for r in p.runs:
 					r.font.name = 'Arial'
 				p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
+			if i == 1:
+				cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
 
 	# Работа с терминами
@@ -141,7 +142,7 @@ def document_preparing(document: Document):
 	table2.style = 'pwndoc-table'
 
 	for row in table2.rows:
-		for cell in row.cells:
+		for i, cell in enumerate(row.cells):
 			cell._element.get_or_add_tcPr().append(parse_xml(
 				r'<w:tcBorders {}><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>'.format(
 					nsdecls('w'))))
@@ -149,7 +150,8 @@ def document_preparing(document: Document):
 				for r in p.runs:
 					r.font.name = 'Arial'
 				p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-			cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
+			if i == 1:
+				cell.vertical_alignment = WD_ALIGN_VERTICAL.TOP
 
 
 	# проверка на Null в полях "Уровень трудности устранения" и "Приоритет" (если Null, то не выводить название)
