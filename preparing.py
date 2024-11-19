@@ -160,23 +160,26 @@ def document_preparing(document: Document):
 	fields = ['Уровень трудности устранения', 'Приоритет']
 	in_section_6 = False
 	for p in document._element.findall('.//w:p', NAMESPACES.DOCX):
-		if p.text is None:
-			continue
+		text = p.text
+		if text is None:
+			text = p.xpath("string()")
+		if text is None:
+			text = p.tail
 		for field in fields:
-			if field in p.text:
-				parts = p.text.split(': ')
+			if field in text:
+				parts = text.split(': ')
 				if len(parts) < 2:
 					p.getparent().remove(p)
 				elif parts[1].replace(' ', '') == '':
 					p.getparent().remove(p)
 
-		if p.text.lower().replace(' ', '') == 'Детальное описание хода работ и результатов'.lower().replace(' ', ''):
+		if text.lower().replace(' ', '') == 'Детальное описание хода работ и результатов'.lower().replace(' ', ''):
 			# проверка на 6 пункт
 			in_section_6 = True
 
 		if in_section_6:
 
-			if p.text.lower().replace(' ', '') == 'Рекомендации:'.lower():
+			if text.lower().replace(' ', '') == 'Рекомендации:'.lower():
 				runs = p.findall('.//w:r', NAMESPACES.DOCX)
 				if len(runs) > 0:
 					runs[0].text = 'Рекомендации к устранению:'
