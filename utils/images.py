@@ -57,7 +57,7 @@ def replace_image_references(document, images):
             search_text = f'[см. {key}]'
             replacement_text = f'{value}'
 
-            if search_text in p.text:
+            if p.text is not None and search_text in p.text:
                 replaces.append((search_text, replacement_text, key))
 
         if len(replaces) > 0:
