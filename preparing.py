@@ -160,6 +160,8 @@ def document_preparing(document: Document):
 	fields = ['Уровень трудности устранения', 'Приоритет']
 	in_section_6 = False
 	for p in document._element.findall('.//w:p', NAMESPACES.DOCX):
+		if p.text is None:
+			continue
 		for field in fields:
 			if field in p.text:
 				parts = p.text.split(': ')
