@@ -14,6 +14,19 @@ class NAMESPACES:
 	DOCX = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
 
 
+img_names = ['высокий', 'выше среднего', 'крайне низкий', 'ниже среднего', 'низкий', 'средний']
+
+
+def change_color_for_bold(document: Document):
+	for paragraph in document.paragraphs:
+		for run in paragraph.runs:
+			for bold in run._element.findall('.//w:b', NAMESPACES.DOCX):
+				bold_color = etree.Element("{" + NAMESPACES.DOCX['w'] + "}color", nsmap=NAMESPACES.DOCX)
+				bold_color.attrib["{" + NAMESPACES.DOCX['w'] + '}themeColor'] = 'accent1'
+				bold_color.attrib["{" + NAMESPACES.DOCX['w'] + '}val'] = '002854'
+				bold.getparent().append(bold_color)
+
+
 def document_preparing(document: Document):
 	image_counter = 1
 	in_section_6 = False
@@ -40,7 +53,7 @@ def document_preparing(document: Document):
 		if next_p_add_art:
 			run = paragraph.insert_paragraph_before()
 			run.alignment = 1
-			run.add_run().add_picture(f"arts/{picture}.png", width=Inches(6))
+			run.add_run().add_picture(f"arts/{picture}.png", width=Cm(17.5))
 			next_p_add_art = False
 
 		if paragraph.text.find("От внешнего нарушителя ресурса") != -1:
@@ -161,10 +174,10 @@ def document_preparing(document: Document):
 	in_section_6 = False
 	for p in document._element.findall('.//w:p', NAMESPACES.DOCX):
 		text = p.text
-		if text is None:
-			text = p.xpath("string()")
-		if text is None:
-			text = p.tail
+		# if text is None:
+		# 	text = p.xpath("string()")
+		# if text is None:
+		# 	text = p.tail
 		for field in fields:
 			if field in text:
 				parts = text.split(': ')
@@ -195,9 +208,12 @@ def document_preparing(document: Document):
 
 					# регулировка отступа слева
 					ind = etree.Element("{" + NAMESPACES.DOCX['w'] + "}ind", nsmap=NAMESPACES.DOCX)
-					ind.attrib["{" + NAMESPACES.DOCX['w'] + '}left'] = "720"
+					ind.attrib["{" + NAMESPACES.DOCX['w'] + '}left'] = "1134" #"720"
 
 					p_style.addnext(ind)
 
 	# удаляем выделения текста
 	highlight_clear(document)
+
+	# меняем цвет жирного шрифта на синий
+	change_color_for_bold(document)
